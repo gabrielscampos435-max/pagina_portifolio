@@ -1,7 +1,9 @@
 (() => {
+  // Constantes
   const WHATSAPP_NUMBER = "5511989872321";
-  const WHATSAPP_MESSAGE = "Ola! Vi seu portfolio de edicao e queria pedir um orcamento para um video.";
+  const WHATSAPP_MESSAGE = "Olá! Vi seu portfólio de edição e queria pedir um orçamento para um vídeo.";
 
+  // Seletores principais
   const elements = {
     header: document.querySelector("[data-header]"),
     menuButton: document.querySelector(".menu-toggle"),
@@ -13,11 +15,30 @@
   const navLinks = elements.navPanel ? [...elements.navPanel.querySelectorAll("a")] : [];
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  // Helpers gerais
   const isEmptyHref = (href = "") => {
     const value = href.trim();
     return !value || value === "#";
   };
 
+  const setDisabledLink = (link, label) => {
+    link.textContent = label;
+    link.dataset.disabled = "true";
+    link.setAttribute("aria-disabled", "true");
+    link.classList.add("is-disabled");
+  };
+
+  const setActiveExternalLink = (link, href, label) => {
+    if (label) link.textContent = label;
+    link.href = href;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.dataset.disabled = "false";
+    link.removeAttribute("aria-disabled");
+    link.classList.remove("is-disabled");
+  };
+
+  // Helpers do YouTube
   const getYoutubeId = (url = "") => {
     if (isEmptyHref(url)) return null;
 
@@ -50,26 +71,10 @@
   const buildYoutubeThumbnail = (id) => `https://img.youtube.com/vi/${encodeURIComponent(id)}/hqdefault.jpg`;
   const buildYoutubeEmbed = (id) => `https://www.youtube.com/embed/${encodeURIComponent(id)}`;
 
+  // WhatsApp
   const buildWhatsappUrl = () => {
     const message = encodeURIComponent(WHATSAPP_MESSAGE);
     return `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
-  };
-
-  const setDisabledLink = (link, label) => {
-    link.textContent = label;
-    link.dataset.disabled = "true";
-    link.setAttribute("aria-disabled", "true");
-    link.classList.add("is-disabled");
-  };
-
-  const setActiveExternalLink = (link, href, label) => {
-    if (label) link.textContent = label;
-    link.href = href;
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
-    link.dataset.disabled = "false";
-    link.removeAttribute("aria-disabled");
-    link.classList.remove("is-disabled");
   };
 
   const renderWhatsappLinks = () => {
@@ -82,6 +87,7 @@
     });
   };
 
+  // Showreel
   const renderShowreel = () => {
     if (!elements.showreelLink || !elements.showreelContent) return;
 
@@ -115,16 +121,17 @@
     setDisabledLink(elements.showreelLink, "Showreel em breve");
     elements.showreelContent.innerHTML = `
       ${playerBar}
-      <div class="showreel-placeholder" role="img" aria-label="Espaco visual reservado para o showreel principal">
+      <div class="showreel-placeholder" role="img" aria-label="Espaço visual reservado para o showreel principal">
         <i class="fa-solid fa-play" aria-hidden="true"></i>
         <div>
-          <strong>Showreel em preparacao</strong>
-          <span>Area reservada para o video principal do portfolio.</span>
+          <strong>Showreel em preparação</strong>
+          <span>Área reservada para o vídeo principal do portfólio.</span>
         </div>
       </div>
     `;
   };
 
+  // Cards de vídeo
   const renderVideoCard = (card) => {
     const link = card.querySelector("[data-video-link]");
     const thumb = card.querySelector("[data-video-thumb]");
@@ -133,7 +140,7 @@
     const href = link.getAttribute("href") || "";
     const videoId = getYoutubeId(href);
     const tag = card.querySelector(".tag")?.textContent?.trim() || "YouTube";
-    const title = card.querySelector("h3")?.textContent?.trim() || "Video";
+    const title = card.querySelector("h3")?.textContent?.trim() || "Vídeo";
 
     thumb.innerHTML = "";
     thumb.classList.toggle("has-video", Boolean(videoId));
@@ -151,7 +158,7 @@
       thumbTag.textContent = tag;
       thumb.append(thumbTag);
 
-      thumb.setAttribute("aria-label", `Thumbnail do video ${title}`);
+      thumb.setAttribute("aria-label", `Thumbnail do vídeo ${title}`);
       setActiveExternalLink(link, href, "Assistir vídeo");
       return;
     }
@@ -162,7 +169,7 @@
         <i class="fa-solid fa-clapperboard" aria-hidden="true"></i>
       </div>
     `;
-    thumb.setAttribute("aria-label", "Espaco visual para video em breve");
+    thumb.setAttribute("aria-label", "Espaço visual para vídeo em breve");
     setDisabledLink(link, "Vídeo em breve");
   };
 
@@ -170,6 +177,7 @@
     document.querySelectorAll("[data-video-card]").forEach(renderVideoCard);
   };
 
+  // Links sociais
   const renderSocialLinks = () => {
     document.querySelectorAll("[data-social-link]").forEach((link) => {
       const href = link.getAttribute("href") || "";
@@ -197,6 +205,7 @@
     });
   };
 
+  // Menu mobile
   const setMenuState = (isOpen) => {
     if (!elements.menuButton || !elements.navPanel) return;
 
@@ -230,6 +239,7 @@
     });
   };
 
+  // Header no scroll
   const bindHeader = () => {
     const updateHeader = () => {
       elements.header?.classList.toggle("is-scrolled", window.scrollY > 12);
@@ -239,6 +249,7 @@
     window.addEventListener("scroll", updateHeader, { passive: true });
   };
 
+  // Active sections
   const bindActiveSections = () => {
     if (!("IntersectionObserver" in window)) return;
 
@@ -258,6 +269,7 @@
     sections.forEach((section) => sectionObserver.observe(section));
   };
 
+  // Reveal animations
   const bindReveal = () => {
     const revealItems = [...document.querySelectorAll(".reveal")];
 
@@ -281,6 +293,7 @@
     revealItems.forEach((item) => revealObserver.observe(item));
   };
 
+  // Init
   const init = () => {
     renderWhatsappLinks();
     renderShowreel();

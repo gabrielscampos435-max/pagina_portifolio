@@ -22,7 +22,7 @@
   --container: min(1120px, calc(100% - 40px));
 }
 
-/* Reset/base */
+/* Reset/Base */
 * {
   box-sizing: border-box;
 }
@@ -84,7 +84,7 @@ h3 {
   line-height: 1.25;
 }
 
-/* Header/navbar */
+/* Header/Navbar */
 .site-header {
   position: fixed;
   top: 0;
@@ -573,7 +573,7 @@ h3 {
   box-shadow: 0 20px 55px rgba(4, 2, 12, 0.32);
 }
 
-/* Works/videos */
+/* Works/Videos */
 .work-card {
   overflow: hidden;
 }
@@ -858,7 +858,7 @@ h3 {
   box-shadow: 0 22px 54px rgba(37, 211, 102, 0.38);
 }
 
-/* Font Awesome fallback */
+/* Icons/Fallbacks */
 .fa-solid,
 .fa-brands {
   display: inline-grid;
